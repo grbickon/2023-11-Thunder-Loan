@@ -12,7 +12,7 @@ clean  :; forge clean
 # Remove modules
 remove :; rm -rf .gitmodules && rm -rf .git/modules/* && rm -rf lib && touch .gitmodules && git add . && git commit -m "modules"
 
-install :; forge install foundry-rs/forge-std --no-commit && forge install openzeppelin/openzeppelin-contracts@v4.9.3 --no-commit && forge install openzeppelin/openzeppelin-contracts-upgradeable@v4.9.3  --no-commit 
+install :; forge install foundry-rs/forge-std && forge install openzeppelin/openzeppelin-contracts@v4.9.3 && forge install openzeppelin/openzeppelin-contracts-upgradeable@v4.9.3 
 
 # Update Dependencies
 update:; forge update
@@ -31,4 +31,10 @@ slither :; slither . --config-file slither.config.json --checklist
 
 scope :; tree ./src/ | sed 's/└/#/g; s/──/--/g; s/├/#/g; s/│ /|/g; s/│/|/g'
 
-scopefile :; @tree ./src/ | sed 's/└/#/g' | awk -F '── ' '!/\.sol$$/ { path[int((length($$0) - length($$2))/2)] = $$2; next } { p = "src"; for(i=2; i<=int((length($$0) - length($$2))/2); i++) if (path[i] != "") p = p "/" path[i]; print p "/" $$2; }' > scope.txt
+scopefile :; @tree ./src/ | sed 's/└/#/g' | awk -F '── ' '!/\.sol$$/ { path[int((length($$0) - length($$2))/2)] = $$2; next } { p = "src"; for(i=2; i<=int((length($$0) - length($$2))/2); i++) if (path[i] != "") p = p "/" path[i]; print p "/" $$2; }' > scope.txt\
+
+foundry :; curl -L https://foundry.paradigm.xyz | bash
+
+slither :; pip3 install slither-analyzer
+
+cyfrin :; curl -L https://raw.githubusercontent.com/Cyfrin/up/main/install | bash

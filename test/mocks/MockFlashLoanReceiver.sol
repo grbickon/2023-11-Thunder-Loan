@@ -28,7 +28,7 @@ contract MockFlashLoanReceiver {
         uint256 amount,
         uint256 fee,
         address initiator,
-        bytes calldata /*  params */
+        bytes calldata params
     )
         external
         returns (bool)
@@ -41,7 +41,9 @@ contract MockFlashLoanReceiver {
             revert MockFlashLoanReceiver__onlyThunderLoan();
         }
         IERC20(token).approve(s_thunderLoan, amount + fee);
-        IThunderLoan(s_thunderLoan).repay(token, amount + fee);
+        if (keccak256(bytes(params)) != keccak256(bytes("DO NOT REPAY"))) {
+            IThunderLoan(s_thunderLoan).repay(token, amount + fee);
+        }
         s_balanceAfterFlashLoan = IERC20(token).balanceOf(address(this));
         return true;
     }
